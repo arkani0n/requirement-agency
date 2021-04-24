@@ -1,0 +1,29 @@
+{% extends 'main/base_template.html' %}
+{% block title %} {{ client.last_name }}'s Profile {% endblock %}
+{% block content %}
+
+{{ client.image }}
+<br>
+    <base href="http://127.0.0.1:8000/media/">
+    <a href="{{ client.cv }}">See CV</a>
+    <h3>
+{{ client.first_name }}
+{{ client.last_name }}
+</h3>
+        <br>
+    <h4>Information</h4>
+
+    <h5>{{ client.about }}</h5>
+<br>
+    <h4>Skills</h4>
+<h5>{{ client.skills }}</h5>
+<br>
+<h4>Contact information</h4>
+<h4>{{ client.email }}
+{{ client.phone_number }}</h4>
+<br>
+{% if user.id == client.user.id %}
+<a href="{% url 'client_update' user.client.id %}">Update information</a>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'main/base_template.html' %}
+{% block title %} {{ company.company_name }}'s Profile {% endblock %}
+{% block content %}
+
+{{ company.image }}
+<br>
+<h4>{{ company.company_name }}</h4>
+<br>
+<h4>About company:</h4>
+
+    <h5>{{ company.about }}</h5>
+<br>
+<br>
+<h4>Contact information</h4>
+<h5>{{ company.email }}
+    <br>
+{{ company.phone_number }}
+<br>
+<a href="{{ company.web_site }}">{{ company.web_site }}</a>
+</h5>
+<br>
+{% if user.id == company.user.id %}
+<a href="{% url 'company_update' user.company.id %}">Update information</a>
+{% endif %}
+<div class="vacancy_list">
+<table class="vacancy_list_table">
+{% for vacancy in vacancies %}
+    <tr>
+        <td>
+<a href="{% url 'vacancy_detail' vacancy.id %}"><h4>{{ vacancy.title }}</h4></a>
+            <br>
+<h5>by <a href="{% url 'company_detail' vacancy.company_id.id %}">{{vacancy.company_id.company_name}}</a></h5>
+        </td>
+
+        <td>
+            <h4>City: {{ vacancy.city }}</h4>
+        </td>
+        <td>
+            <h5>{{ vacancy.short_description }}</h5>
+
+        </td>
+        <td>
+            <h4>{{ vacancy.salary }}$</h4>
+        </td>
+    </tr>
+        {% endfor %}
+    </table>
+    </div>
+
+{% endblock %}

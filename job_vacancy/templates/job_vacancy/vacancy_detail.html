@@ -1,0 +1,65 @@
+{% extends 'main/base_template.html' %}
+{% block title %} {{ vacancy.title }} {% endblock %}
+{% block content %}
+{% if user.is_authenticated %}
+{% if user.is_company %}
+{% if user.id == vacancy.company_id.user.id %}
+<h5>{{ vacancy.marked_by_client.all | length }} client added this vacancy to "Marked"
+    <br> <a href="{% url 'vacancy_see_cvs' vacancy.id %}">See CVs</a></h5>
+<br>
+<form method="get" action="{% url 'vacancy_update' vacancy.id %}"><button type="submit" >Update vacancy</button></form>
+<form method="get" action="{% url 'vacancy_delete' vacancy.id %}"><button type="submit" >Delete vacancy</button></form>
+
+<br>
+{% endif %}
+{% endif %}
+{% if user.is_client %}
+<form method="post">
+    {% csrf_token %}
+    {% if not vacancy in user.client.marked_vacancies.all %}
+     <input type="hidden" id="vacancy_id" name="vacancy_id" value="{{ pk }}">
+     <input type="hidden" id="client_id" name="client_id" value="{{ user.client.id }}">
+    <button type="submit" formaction="{% url 'mark_vacancy' vacancy.id %}">Mark vacancy</button>
+    {% endif %}
+
+    {% if vacancy in user.client.marked_vacancies.all %}
+    <input type="hidden" id="vacancy_id" name="vacancy_id" value="{{ pk }}">
+     <input type="hidden" id="client_id" name="client_id" value="{{ user.client.id }}">
+    <button type="submit" formaction="{% url 'remove_marked_vacancy' vacancy.id %}">Remove mark</button>
+    {% endif %}
+
+</form>
+    {% endif %}
+<h4>{{ vacancy.title }}</h4>
+
+<h5>by <a href="{% url 'company_detail' vacancy.company_id.id %}">{{vacancy.company_id.company_name}}</a>
+</h5>
+<br>
+<h4>In
+{{ vacancy.city }} city
+    </h4>
+<br>
+<br>
+<h4>Required skills:</h4>
+<br>
+<h5>{{ vacancy.needed_skills }}</h5>
+<br>
+<br>
+<h4>Description:</h4>
+<br>
+<h5>{{ vacancy.description }}</h5>
+<br>
+<br>
+<h4> Salary:
+{{ vacancy.salary }} $ per mouth
+    </h4>
+<br>
+
+<br>
+
+<a href="{% url 'company_detail' vacancy.company_id.id %}"></a>
+<br>
+
+{% endif %}
+
+{% endblock %}

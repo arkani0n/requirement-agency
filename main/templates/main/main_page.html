@@ -1,0 +1,9 @@
+{% extends 'main/base_template.html' %}
+{% block title %} Main page {% endblock %}
+{% block content %}
+{% if user.is_authenticated %}
+    <p>Welcome, {{ user.email }}. Thanks for logging in.</p>
+{% else %}
+    <p>Welcome, new user. Please log in.</p>
+{% endif %}
+{% endblock %}

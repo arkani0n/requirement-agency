@@ -1,0 +1,24 @@
+body { background-color: #ffc95a;
+overflow-x: hidden}
+div.navigation_bar {background-color: darkgoldenrod}
+div.vacancy_navigation_bar { background-color: gold}
+div.content { background-color: #FDFFFC;
+              width: 85%;
+    height: auto; /* viewport height - fixed banner height */
+overflow-x: hidden;
+            margin-left: 100px;}
+
+table.navigation_bar_table {margin-left: 10px;
+                                    width: 100%}
+table.vacancy_list_table {margin-left: 10px;
+  border: 1px solid black;
+}
+table.vacancy_navigation_bar_table {margin-left: 10px;
+                                  width: 100%;
+}
+
+td {
+  border: 40px solid white;
+    text-align-all: left;
+}
+
