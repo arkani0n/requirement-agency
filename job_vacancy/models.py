@@ -18,7 +18,7 @@ class JobVacancy(models.Model):
     city = models.CharField(max_length=40)
     company_id = models.ForeignKey('profiles.Company', on_delete=models.CASCADE,related_name='vacancies_of_company')
     publish_dat = models.DateField(auto_now=True)
-    marked_by_client=models.ManyToManyField('profiles.Client',related_name='marked_vacancies')
+    got_cvs=models.ManyToManyField('profiles.Client', related_name='sent_cvs')
     category=models.CharField(max_length=50,choices=CATEGORY_CHOICES)
 
     def get_absolute_url(self):

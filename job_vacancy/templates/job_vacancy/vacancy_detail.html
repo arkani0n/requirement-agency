@@ -4,8 +4,11 @@
 {% if user.is_authenticated %}
 {% if user.is_company %}
 {% if user.id == vacancy.company_id.user.id %}
-<h5>{{ vacancy.marked_by_client.all | length }} client added this vacancy to "Marked"
+
+{% if vacancy.got_cvs.all %}
+<h5>{{ vacancy.got_cvs.all | length }} client send CVs this vacancy
     <br> <a href="{% url 'vacancy_see_cvs' vacancy.id %}">See CVs</a></h5>
+    {% endif %}
 <br>
 <form method="get" action="{% url 'vacancy_update' vacancy.id %}"><button type="submit" >Update vacancy</button></form>
 <form method="get" action="{% url 'vacancy_delete' vacancy.id %}"><button type="submit" >Delete vacancy</button></form>
@@ -16,16 +19,16 @@
 {% if user.is_client %}
 <form method="post">
     {% csrf_token %}
-    {% if not vacancy in user.client.marked_vacancies.all %}
+    {% if not vacancy in user.client.sent_cvs.all %}
      <input type="hidden" id="vacancy_id" name="vacancy_id" value="{{ pk }}">
      <input type="hidden" id="client_id" name="client_id" value="{{ user.client.id }}">
-    <button type="submit" formaction="{% url 'mark_vacancy' vacancy.id %}">Mark vacancy</button>
+    <button type="submit" formaction="{% url 'send_cv' vacancy.id %}">Send CV</button>
     {% endif %}
 
-    {% if vacancy in user.client.marked_vacancies.all %}
+    {% if vacancy in user.client.sent_cvs.all %}
     <input type="hidden" id="vacancy_id" name="vacancy_id" value="{{ pk }}">
      <input type="hidden" id="client_id" name="client_id" value="{{ user.client.id }}">
-    <button type="submit" formaction="{% url 'remove_marked_vacancy' vacancy.id %}">Remove mark</button>
+    <button type="submit" formaction="{% url 'return_cv' vacancy.id %}">Return CV</button>
     {% endif %}
 
 </form>

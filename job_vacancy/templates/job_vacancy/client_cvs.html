@@ -4,9 +4,13 @@
 
 
     {% for client in clients %}
-    <h5>{{ client.first_name }} {{ client.last_name }}
+    <h5>{{ client.first_name }} {{ client.last_name }},
 
+        {% if client.cv %}
         <a href="http://{{ base_url}}/media/{{ client.cv }}">CV</a>
+        {% else %}
+            No CV added yet
+        {% endif %}
         <br> <a href="{% url 'client_detail' client.id %}"> Profile</a></h5>
         <br>
 

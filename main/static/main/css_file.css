@@ -4,9 +4,10 @@ div.navigation_bar {background-color: darkgoldenrod}
 div.vacancy_navigation_bar { background-color: gold}
 div.content { background-color: #FDFFFC;
               width: 85%;
-    height: auto; /* viewport height - fixed banner height */
+    height: auto;
 overflow-x: hidden;
-            margin-left: 100px;}
+            margin-left: 100px;
+    padding-bottom: 70px}
 
 table.navigation_bar_table {margin-left: 10px;
                                     width: 100%}
@@ -20,5 +21,14 @@ table.vacancy_navigation_bar_table {margin-left: 10px;
 td {
   border: 40px solid white;
     text-align-all: left;
+}
+footer{
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color:#FDFFFC ;
+    background-color: #140F2D;
+    position: fixed;
 }
 

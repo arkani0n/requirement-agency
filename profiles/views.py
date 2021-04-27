@@ -1,10 +1,11 @@
-from django.views.generic import DetailView,CreateView,UpdateView,TemplateView
+from django.views.generic import DetailView,CreateView,UpdateView,TemplateView,ListView
 from django.contrib.auth.views import LoginView,LogoutView
 from django.contrib.auth import login
 from . import models,forms
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from job_vacancy.models import JobVacancy
+from django.views.generic.list import MultipleObjectMixin
 
 
 class RegisterView(TemplateView):
@@ -65,17 +66,22 @@ class ClientDetail(DetailView):
     template_name = 'profiles/client_detail.html'
 
 
-class CompanyDetail(DetailView):
-    model = models.Company
-    context_object_name = 'company'
+
+class CompanyDetail(ListView):
+    context_object_name = 'vacancies'
     template_name = 'profiles/company_detail.html'
+    paginate_by = 3
+
+
+    def get_queryset(self):
+        self.queryset = JobVacancy.objects.filter(company_id_id=self.kwargs['pk'],is_active=True)
+        self.queryset=super().get_queryset()
+        return self.queryset
 
     def get_context_data(self, **kwargs):
 
         context = super(CompanyDetail, self).get_context_data()
-        context['vacancies'] = JobVacancy.objects.filter(
-        company_id=models.Company.objects.get(id=self.kwargs['pk']),
-            is_active=True)
+        context['company'] = models.Company.objects.get(id=self.kwargs['pk'])
         return context
 
 

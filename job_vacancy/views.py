@@ -27,11 +27,6 @@ class VacancyUpdate(UpdateView):
     template_name = 'job_vacancy/vacancy_update_form.html'
     form_class = forms.VacancyUpdateForm
 
-    @classonlymethod
-    def as_view(cls, **initkwargs):
-        self = cls(**initkwargs)
-        view = super(VacancyUpdate, cls).as_view(**initkwargs)
-        return view
 
     def get_success_url(self):
         return reverse('vacancy_detail', args=[self.kwargs['pk']])
@@ -53,7 +48,7 @@ class VacancyList(ListView):
     context_object_name = 'vacancy_list'
     template_name = 'job_vacancy/vacancy_list.html'
     extra_context = {'category_choises': JobVacancy.CATEGORY_CHOICES}
-    paginate_by = 10
+    paginate_by = 3
     def get_queryset(self):
         object_list=super(VacancyList, self).get_queryset()
         object_list=object_list.filter(is_active=True)
@@ -71,7 +66,7 @@ class MarkedVacanciesList(VacancyList):
 
     def get_queryset(self):
         object_list = super(MarkedVacanciesList, self).get_queryset()
-        object_list=object_list.filter(marked_by_client=Client.objects.get(id=self.kwargs['pk']))
+        object_list=object_list.filter(got_cvs=Client.objects.get(id=self.kwargs['pk']))
         return object_list
 
 
@@ -102,19 +97,19 @@ class VacancyDelete(DeleteView):
     def get_success_url(self):
         return reverse('vacancy_list')
 
-def add_to_marked(request, pk):
+def send_cv(request, pk):
     post = request.POST
     client = Client.objects.get(id=post.get('client_id'))
     vacancy = JobVacancy.objects.get(id=pk)
-    vacancy.marked_by_client.add(client)
+    vacancy.got_cvs.add(client)
     return HttpResponseRedirect(reverse('vacancy_detail', args=[pk]))
 
 
-def delete_from_marked(request, pk):
+def return_cv(request, pk):
     post = request.POST
     client = Client.objects.get(id=post.get('client_id'))
     vacancy = JobVacancy.objects.get(id=pk)
-    vacancy.marked_by_client.remove(client)
+    vacancy.got_cvs.remove(client)
     return HttpResponseRedirect(reverse('vacancy_detail', args=[pk]))
 
 
@@ -124,7 +119,7 @@ class VacancyClientCVs(TemplateView):
 
     def get_query_set(self):
         vacancy=JobVacancy.objects.get(id=self.kwargs['pk'])
-        clients=vacancy.marked_by_client.all()
+        clients=vacancy.got_cvs.all()
         print(clients)
         return clients
 

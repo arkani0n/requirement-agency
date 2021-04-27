@@ -14,8 +14,8 @@ urlpatterns = [
     path('all/<int:pk>', views.CompaniesVacancyList.as_view(), name='companys_vacancy_list'),
     path('all/marked/<int:pk>', views.MarkedVacanciesList.as_view(), name='clients_marked_vacancies_list'),
     path('all/filtered', views.SearchFilteredVacancyList.as_view(), name='search_filtered_vacancies_list'),
-    path('<int:pk>/mark_add', views.add_to_marked, name='mark_vacancy'),
-    path('<int:pk>/mark_delete', views.delete_from_marked, name='remove_marked_vacancy'),
+    path('<int:pk>/mark_add', views.send_cv, name='send_cv'),
+    path('<int:pk>/mark_delete', views.return_cv, name='return_cv'),
     path('<int:pk>/delete', views.VacancyDelete.as_view(), name='vacancy_delete'),
     path('<int:pk>/cvs', decorators.authentication_required(
         decorators.company_required(
