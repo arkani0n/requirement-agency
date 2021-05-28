@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from pathlib import Path
+from . import settings_info
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '-vojuua-53#+l-2l-jc=-0-#(w2_^a^s3obje2e$!^bnn-l9&h'
+SECRET_KEY = settings_info.DJANGO_SECURITY_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -79,8 +80,12 @@ WSGI_APPLICATION = 'recruitment_agency.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'recuirment_agency',
+        'USER': settings_info.DB_USERNAME,
+        'PASSWORD': settings_info.DB_PASSWORD,
+        'HOST':'localhost',
+        'PORT':'5432'
     }
 }
 

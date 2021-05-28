@@ -1,4 +1,5 @@
-./db.sqlite3
 .idea
-media/*
-./*/migrations/*
+media/**
+!media
+/*/migrations/**
+/recruitment_agency/settings_info.py
