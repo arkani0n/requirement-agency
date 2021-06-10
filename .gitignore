@@ -3,3 +3,5 @@ media/**
 !media
 /*/migrations/**
 /recruitment_agency/settings_info.py
+/Docker/postgres/init.sql
+/docker-compose.yml

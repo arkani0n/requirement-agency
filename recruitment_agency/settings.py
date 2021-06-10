@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'profiles',
     'job_vacancy',
-    'main'
+    'main',
+    'psycopg2'
 ]
 
 MIDDLEWARE = [
@@ -79,14 +80,7 @@ WSGI_APPLICATION = 'recruitment_agency.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'recuirment_agency',
-        'USER': settings_info.DB_USERNAME,
-        'PASSWORD': settings_info.DB_PASSWORD,
-        'HOST':'localhost',
-        'PORT':'5432'
-    }
+    'default': settings_info.DB_INFO
 }
 
 
