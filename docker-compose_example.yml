@@ -1,26 +1,39 @@
-version: "3"
-services:
-  postgres_db:
-    build:
-      context: ./Docker/postgres
-      dockerfile: Dockerfile
-    environment:
-      - POSTGRES_PASSWORD=postgres_password
-    volumes:
-    - ./Docker/postgres/init.sql:/docker-entrypiont-initdb.d/init.sql
-    - ./postgres-data:/var/lib/postgresql/data
-    ports:
-      - '5000:5432'
-  web:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    environment:
-      DB_NAME: db
-      DB_USER: admin
-      DB_PASSWORD: db_password
-      DB_PORT: 5432
-    depends_on:
-      - postgres_db
-    ports:
-    - '8005:8000'
+vversion: "3"
+  services:
+    postgres_db:
+      image: postgres
+      environment:
+        - POSTGRES_PASSWORD=db_password_postgres
+        - POSTGRES_USER=admin
+        - POSTGRES_DB=db
+      volumes:
+        - ./postgres-data:/var/lib/postgresql/data
+      ports:
+        - '5000:5432'
+    web:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      environment:
+        DB_NAME: db
+        DB_USER: admin
+        DB_PASSWORD: db_password
+        DB_PORT: 5432
+      depends_on:
+        - postgres_db
+      ports:
+        - '8000:8000'
+      volumes:
+        - ./media:/home/dev/media
+        - ./static-files:/home/dev/static
+    nginx:
+      build:
+        context: Docker/nginx/
+        dockerfile: Dockerfile
+      volumes:
+        - ./static-files:/static
+      depends_on:
+        - web
+        - postgres_db
+      ports:
+        - '80:80'

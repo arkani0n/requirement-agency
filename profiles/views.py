@@ -65,6 +65,19 @@ class ClientDetail(DetailView):
     context_object_name = 'client'
     template_name = 'profiles/client_detail.html'
 
+    def get_context_data(self, **kwargs):
+        context=super().get_context_data(**kwargs)
+        x_forwarded_for = self.request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = self.request.META.get('REMOTE_ADDR')
+        context['base_url']=ip
+        if ip == '127.0.0.1':
+            context['port'] = self.request.META['SERVER_PORT']
+
+        return context
+
 
 
 class CompanyDetail(ListView):

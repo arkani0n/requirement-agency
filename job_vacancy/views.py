@@ -120,13 +120,19 @@ class VacancyClientCVs(TemplateView):
     def get_query_set(self):
         vacancy=JobVacancy.objects.get(id=self.kwargs['pk'])
         clients=vacancy.got_cvs.all()
-        print(clients)
         return clients
 
 
     def get_context_data(self, **kwargs):
         context=super(VacancyClientCVs, self).get_context_data()
-        context['base_url']=self.request.META['HTTP_HOST']
+        x_forwarded_for = self.request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = self.request.META.get('REMOTE_ADDR')
+        context['base_url'] = ip
+        if ip == '127.0.0.1':
+            context['port'] = self.request.META['SERVER_PORT']
         clients=self.get_query_set()
         context['clients']=clients
         return context
