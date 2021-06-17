@@ -3,9 +3,9 @@ vversion: "3"
     postgres_db:
       image: postgres
       environment:
-        - POSTGRES_PASSWORD=db_password
+        - POSTGRES_PASSWORD=password
         - POSTGRES_USER=admin
-        - POSTGRES_DB=db
+        - POSTGRES_DB=recuirment_agency
       volumes:
         - ./postgres-data:/var/lib/postgresql/data
       ports:
@@ -15,9 +15,9 @@ vversion: "3"
         context: .
         dockerfile: Dockerfile
       environment:
-        DB_NAME: db
+        DB_NAME: recuirment_agency
         DB_USER: admin
-        DB_PASSWORD: db_password
+        DB_PASSWORD: password
         DB_PORT: 5432
       depends_on:
         - postgres_db
