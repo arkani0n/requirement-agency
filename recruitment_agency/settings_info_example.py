@@ -3,7 +3,7 @@ import os
 
 DJANGO_SECURITY_KEY= 'django_security_key'
 if os.getenv('DB_NAME') and os.getenv('DB_USER') and os.getenv('DB_PASSWORD') and os.getenv('DB_PORT'):
-
+                #if run thogh docker
         DB_INFO={
                 'ENGINE': 'django.db.backends.postgresql',
                 'NAME': os.getenv('DB_NAME') ,

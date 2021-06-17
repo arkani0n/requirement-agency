@@ -5,12 +5,13 @@
 {{ client.image }}
 <br>
     {% if client.cv %}
+        <a href=
     {% if port %}
-    <base href="http://{{ base_url }}:{{ port }}/media/">
+        "http://{{ base_url }}:{{ port }}/media/{{ client.cv }}"
         {% else %}
-        <base href="http://{{ base_url }}/media/">
+        "http://{{ base_url }}/media/{{ client.cv }}"
         {% endif %}
-    <a href="{{ client.cv }}">See CV</a>
+           > See CV </a>
     {% else %}
     No CV added yet
     {% endif %}

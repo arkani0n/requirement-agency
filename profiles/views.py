@@ -69,7 +69,8 @@ class ClientDetail(DetailView):
         context=super().get_context_data(**kwargs)
         x_forwarded_for = self.request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for:
-            ip = x_forwarded_for.split(',')[0]
+            ip = x_forwarded_for.split(',')[-1]
+            print(x_forwarded_for)
         else:
             ip = self.request.META.get('REMOTE_ADDR')
         context['base_url']=ip
