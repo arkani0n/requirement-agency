@@ -1,68 +1,72 @@
 {% extends 'main/base_template.html' %}
 {% block title %} {{ vacancy.title }} {% endblock %}
 {% block content %}
-{% if user.is_authenticated %}
-{% if user.is_company %}
-{% if user.id == vacancy.company_id.user.id %}
+    {% if user.is_authenticated %}
+        {% if user.is_company %}
+            {% if user.id == vacancy.company_id.user.id %}
 
-{% if vacancy.got_cvs.all %}
-<h5>{{ vacancy.got_cvs.all | length }} client send CVs this vacancy
-    <br> <a href="{% url 'vacancy_see_cvs' vacancy.id %}">See CVs</a></h5>
+                {% if vacancy.got_cvs.all %}
+                    <h5>{{ vacancy.got_cvs.all | length }} client send CVs this vacancy
+                        <br> <a href="{% url 'vacancy_see_cvs' vacancy.id %}">See CVs</a></h5>
+                {% endif %}
+                <br>
+                <form method="get" action="{% url 'vacancy_update' vacancy.id %}">
+                    <button type="submit">Update vacancy</button>
+                </form>
+                <form method="get" action="{% url 'vacancy_delete' vacancy.id %}">
+                    <button type="submit">Delete vacancy</button>
+                </form>
+
+                <br>
+            {% endif %}
+        {% endif %}
+        {% if user.is_client %}
+            <form method="post">
+                {% csrf_token %}
+                {% if not vacancy in user.client.sent_cvs.all %}
+                    <input type="hidden" id="vacancy_id" name="vacancy_id" value="{{ pk }}">
+                    <input type="hidden" id="client_id" name="client_id" value="{{ user.client.id }}">
+                    <button type="submit" formaction="{% url 'send_cv' vacancy.id %}">Send CV</button>
+                {% endif %}
+
+                {% if vacancy in user.client.sent_cvs.all %}
+                    <input type="hidden" id="vacancy_id" name="vacancy_id" value="{{ pk }}">
+                    <input type="hidden" id="client_id" name="client_id" value="{{ user.client.id }}">
+                    <button type="submit" formaction="{% url 'return_cv' vacancy.id %}">Return CV</button>
+                {% endif %}
+
+            </form>
+        {% endif %}
+        <h4>{{ vacancy.title }}</h4>
+
+        <h5>by <a href="{% url 'company_detail' vacancy.company_id.id %}">{{ vacancy.company_id.company_name }}</a>
+        </h5>
+        <br>
+        <h4>In
+            {{ vacancy.city }} city
+        </h4>
+        <br>
+        <br>
+        <h4>Required skills:</h4>
+        <br>
+        <h5>{{ vacancy.needed_skills }}</h5>
+        <br>
+        <br>
+        <h4>Description:</h4>
+        <br>
+        <h5>{{ vacancy.description }}</h5>
+        <br>
+        <br>
+        <h4> Salary:
+            {{ vacancy.salary }} $ per mouth
+        </h4>
+        <br>
+
+        <br>
+
+        <a href="{% url 'company_detail' vacancy.company_id.id %}"></a>
+        <br>
+
     {% endif %}
-<br>
-<form method="get" action="{% url 'vacancy_update' vacancy.id %}"><button type="submit" >Update vacancy</button></form>
-<form method="get" action="{% url 'vacancy_delete' vacancy.id %}"><button type="submit" >Delete vacancy</button></form>
-
-<br>
-{% endif %}
-{% endif %}
-{% if user.is_client %}
-<form method="post">
-    {% csrf_token %}
-    {% if not vacancy in user.client.sent_cvs.all %}
-     <input type="hidden" id="vacancy_id" name="vacancy_id" value="{{ pk }}">
-     <input type="hidden" id="client_id" name="client_id" value="{{ user.client.id }}">
-    <button type="submit" formaction="{% url 'send_cv' vacancy.id %}">Send CV</button>
-    {% endif %}
-
-    {% if vacancy in user.client.sent_cvs.all %}
-    <input type="hidden" id="vacancy_id" name="vacancy_id" value="{{ pk }}">
-     <input type="hidden" id="client_id" name="client_id" value="{{ user.client.id }}">
-    <button type="submit" formaction="{% url 'return_cv' vacancy.id %}">Return CV</button>
-    {% endif %}
-
-</form>
-    {% endif %}
-<h4>{{ vacancy.title }}</h4>
-
-<h5>by <a href="{% url 'company_detail' vacancy.company_id.id %}">{{vacancy.company_id.company_name}}</a>
-</h5>
-<br>
-<h4>In
-{{ vacancy.city }} city
-    </h4>
-<br>
-<br>
-<h4>Required skills:</h4>
-<br>
-<h5>{{ vacancy.needed_skills }}</h5>
-<br>
-<br>
-<h4>Description:</h4>
-<br>
-<h5>{{ vacancy.description }}</h5>
-<br>
-<br>
-<h4> Salary:
-{{ vacancy.salary }} $ per mouth
-    </h4>
-<br>
-
-<br>
-
-<a href="{% url 'company_detail' vacancy.company_id.id %}"></a>
-<br>
-
-{% endif %}
 
 {% endblock %}

@@ -2,38 +2,32 @@
 {% block title %} {{ client.last_name }}'s Profile {% endblock %}
 {% block content %}
 
-{{ client.image }}
-<br>
+    {{ client.image }}
+    <br>
     {% if client.cv %}
-        <a href=
-    {% if port %}
-        "http://{{ base_url }}:{{ port }}/media/{{ client.cv }}"
-        {% else %}
-        "http://{{ base_url }}/media/{{ client.cv }}"
-        {% endif %}
-           > See CV </a>
+        <a href="/media/{{ client.cv }}"> See CV </a>
     {% else %}
-    No CV added yet
+        No CV added yet
     {% endif %}
     <h3>
-{{ client.first_name }}
-{{ client.last_name }}
-</h3>
-        <br>
+        {{ client.first_name }}
+        {{ client.last_name }}
+    </h3>
+    <br>
     <h4>Information</h4>
 
     <h5>{{ client.about }}</h5>
-<br>
-    <h4>Skills</h4>
-<h5>{{ client.skills }}</h5>
-<br>
-<h4>Contact information</h4>
-<h4>{{ client.email }}
     <br>
-{{ client.phone_number }}</h4>
-<br>
-{% if user.id == client.user.id %}
-<a href="{% url 'client_update' user.client.id %}">Update information</a>
-{% endif %}
+    <h4>Skills</h4>
+    <h5>{{ client.skills }}</h5>
+    <br>
+    <h4>Contact information</h4>
+    <h4>{{ client.email }}
+        <br>
+        {{ client.phone_number }}</h4>
+    <br>
+    {% if user.id == client.user.id %}
+        <a href="{% url 'client_update' user.client.id %}">Update information</a>
+    {% endif %}
 
 {% endblock %}

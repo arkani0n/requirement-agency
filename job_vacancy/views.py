@@ -1,4 +1,4 @@
-from django.views.generic import ListView, DetailView, CreateView, UpdateView,DeleteView,TemplateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.decorators import classonlymethod
@@ -27,7 +27,6 @@ class VacancyUpdate(UpdateView):
     template_name = 'job_vacancy/vacancy_update_form.html'
     form_class = forms.VacancyUpdateForm
 
-
     def get_success_url(self):
         return reverse('vacancy_detail', args=[self.kwargs['pk']])
 
@@ -49,16 +48,17 @@ class VacancyList(ListView):
     template_name = 'job_vacancy/vacancy_list.html'
     extra_context = {'category_choises': JobVacancy.CATEGORY_CHOICES}
     paginate_by = 3
+
     def get_queryset(self):
-        object_list=super(VacancyList, self).get_queryset()
-        object_list=object_list.filter(is_active=True)
+        object_list = super(VacancyList, self).get_queryset()
+        object_list = object_list.filter(is_active=True)
         return object_list
 
 
 class CompaniesVacancyList(VacancyList):
 
     def get_queryset(self):
-        object_list= JobVacancy.objects.filter(company_id=Company.objects.get(id=self.kwargs['pk']))
+        object_list = JobVacancy.objects.filter(company_id=Company.objects.get(id=self.kwargs['pk']))
         return object_list
 
 
@@ -66,27 +66,27 @@ class MarkedVacanciesList(VacancyList):
 
     def get_queryset(self):
         object_list = super(MarkedVacanciesList, self).get_queryset()
-        object_list=object_list.filter(got_cvs=Client.objects.get(id=self.kwargs['pk']))
+        object_list = object_list.filter(got_cvs=Client.objects.get(id=self.kwargs['pk']))
         return object_list
 
 
 class SearchFilteredVacancyList(VacancyList):
 
     def get_queryset(self):
-        object_list=super(SearchFilteredVacancyList, self).get_queryset()
+        object_list = super(SearchFilteredVacancyList, self).get_queryset()
 
-        self.category_choice=self.request.GET.get('job_category')
-        self.search_input=self.request.GET.get('search_input')
-        if self.category_choice!='all':
-            object_list=object_list.filter(category=self.category_choice)
+        self.category_choice = self.request.GET.get('job_category')
+        self.search_input = self.request.GET.get('search_input')
+        if self.category_choice != 'all':
+            object_list = object_list.filter(category=self.category_choice)
         if self.search_input:
-            object_list=object_list.filter(title__icontains=self.search_input)
+            object_list = object_list.filter(title__icontains=self.search_input)
         return object_list
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        context=super(SearchFilteredVacancyList, self).get_context_data()
+        context = super(SearchFilteredVacancyList, self).get_context_data()
         context['user_choice'] = self.category_choice
-        context['search_input']=self.search_input
+        context['search_input'] = self.search_input
         return context
 
 
@@ -96,6 +96,7 @@ class VacancyDelete(DeleteView):
 
     def get_success_url(self):
         return reverse('vacancy_list')
+
 
 def send_cv(request, pk):
     post = request.POST
@@ -114,26 +115,15 @@ def return_cv(request, pk):
 
 
 class VacancyClientCVs(TemplateView):
-
     template_name = 'job_vacancy/client_cvs.html'
 
     def get_query_set(self):
-        vacancy=JobVacancy.objects.get(id=self.kwargs['pk'])
-        clients=vacancy.got_cvs.all()
+        vacancy = JobVacancy.objects.get(id=self.kwargs['pk'])
+        clients = vacancy.got_cvs.all()
         return clients
 
-
     def get_context_data(self, **kwargs):
-        context=super(VacancyClientCVs, self).get_context_data()
-        x_forwarded_for = self.request.META.get('HTTP_X_FORWARDED_FOR')
-        if x_forwarded_for:
-            ip = x_forwarded_for.split(',')[-1]
-        else:
-            ip = self.request.META.get('REMOTE_ADDR')
-        context['base_url'] = ip
-        if ip == '127.0.0.1':
-            context['port'] = self.request.META['SERVER_PORT']
-        clients=self.get_query_set()
-        context['clients']=clients
+        context = super(VacancyClientCVs, self).get_context_data()
+        clients = self.get_query_set()
+        context['clients'] = clients
         return context
-

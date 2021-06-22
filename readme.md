@@ -33,19 +33,58 @@ Clients, have a link to see all vacancies where they sent CV
 
 How to start:
 
-First in 'recruitment_agency' directory rename 'settings_info_example.py' to 'settings_info.py'
+Run git clone command to download the project
 
-     Though Python:
-         Postgresql installed 
-         Run init.sql in Postgres (\i 'path to file'/init.sql)
-         Select virtual environment
-         Run pip install -r requirements.txt
-         Run python manage.py makemigrations and python manage.py migrate
-         If needed to create superuser to use admin part run python manage.py createsuperuser
-         To run server: python manage.py runserver
+        git clone https://github.com/arkani0n/requirement-agency.git
+        
+First in 'recruitment_agency' directory, rename 'settings_info_example.py' to 'settings_info.py'
 
-     Though Docker:
-        docker and docker compose installed
-        remane 'docker-comose_example.yml' to 'docker-compose.yml'
-        run docker-compose up     
+Though Python:
+
+1. Postgresql installed 
+1. Login as postgres and run in postgres command line:
+
+        CREATE USER admin WITH PASSWORD 'password';
+        CREATE DATABASE requirement_agency;
+        GRANT ALL PRIVILEGES ON DATABASE  requirement_agency TO admin;
+
+1. If your virtual environment isn't created run:
+
+    To create venv
+    
+         python -m venv /path/to/new/virtual/environment
+         
+    And to activate it:
+    
+          source venv/bin/activate  
+         
+1. To install all needed to run the project:
+
+         pip install -r requirements.txt
+1. To prepare database to work, in project directory run:    
+     
+         python manage.py makemigrations 
+         python manage.py migrate
+
+1. To run server: 
+
+          python manage.py runserver
+If needed to create superuser run:
+
+         python manage.py createsuperuser
+
+Though Docker:
+1. Install docker and docker compose 
+1. Rename 'docker-compose_example.yml' to 'docker-compose.yml'
+1. In project directory run: 
+
+        docker-compose up 
+During build a "PermissionError" may appear with 'requirement-agency/postgres-data' directory
+to fix it you need to give rights on this directory to your user:
+        
+        sudo chown -R 'your user':'your user' postgres-data     
+    
+
+    
+     
     

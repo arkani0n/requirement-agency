@@ -1,82 +1,85 @@
 {% extends 'main/base_template.html' %}
 {% block title %} Main page {% endblock %}
 {% block content %}
-<div class="vacancy_navigation_bar">
-<table class="vacancy_navigation_bar_table">
-    <tr>
-        <th>
-            <a href="{% url 'vacancy_list' %}"> All vacancies</a>
-        </th>
-        <th>
-            {% if user.is_company %}
-            <a href="{% url 'companys_vacancy_list' user.company.id %}">Your vacancies</a>
+    <div class="vacancy_navigation_bar">
+        <table class="vacancy_navigation_bar_table">
+            <tr>
+                <th>
+                    <a href="{% url 'vacancy_list' %}"> All vacancies</a>
+                </th>
+                <th>
+                    {% if user.is_company %}
+                        <a href="{% url 'companys_vacancy_list' user.company.id %}">Your vacancies</a>
 
-            {% endif %}
-            {% if user.is_client %}
-                <a href="{% url 'clients_marked_vacancies_list' user.client.id %}">Marked vacancies </a>
-            {% endif %}
+                    {% endif %}
+                    {% if user.is_client %}
+                        <a href="{% url 'clients_marked_vacancies_list' user.client.id %}">Marked vacancies </a>
+                    {% endif %}
 
-        </th>
+                </th>
 
-        <th>
-            {% if user.is_company %}
-            <a href="{% url 'vacancy_create' %}">Create new vacancy</a>
-            {% endif %}
-        </th>
-    </tr>
-    <tr>
-        <th>
-            <form method="get" action="{% url 'search_filtered_vacancies_list' %}">
-            {% csrf_token %}
-            Search:
-            <select name="job_category" class="dropdown">
-                <option value="all">All vacancies</option>
-                {% for choice_id,choice in category_choises %}
-                    <option value="{{ choice_id }}"
-                            {% if choice_id == user_choice %} selected {% endif %}>
-                        {{ choice }}</option>
-                {% endfor %}
-
-
-            <input type="text" name="search_input" placeholder="Vacancy title?" {% if search_input %}value="{{ search_input }}" {% endif %}>
-            <button class="btn-info" type="submit" value="Find">Find</button>
-            </form>
+                <th>
+                    {% if user.is_company %}
+                        <a href="{% url 'vacancy_create' %}">Create new vacancy</a>
+                    {% endif %}
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    <form method="get" action="{% url 'search_filtered_vacancies_list' %}">
+                        {% csrf_token %}
+                        Search:
+                        <select name="job_category" class="dropdown">
+                            <option value="all">All vacancies</option>
+                            {% for choice_id,choice in category_choises %}
+                                <option value="{{ choice_id }}"
+                                        {% if choice_id == user_choice %} selected {% endif %}>
+                                    {{ choice }}</option>
+                            {% endfor %}
 
 
-        </th>
-    </tr>
+                            <input type="text" name="search_input" placeholder="Vacancy title?"
+                                   {% if search_input %}value="{{ search_input }}" {% endif %}>
+                            <button class="btn-info" type="submit" value="Find">Find</button>
+                    </form>
 
 
-</table>
+                </th>
+            </tr>
+
+
+        </table>
     </div>
-<div class="vacancy_list">
-<table class="vacancy_list_table">
-{% for vacancy in vacancy_list %}
-    <tr>
-        <td>
-<a href="{% url 'vacancy_detail' vacancy.id %}"><h4>{{ vacancy.title }}</h4></a>
-            <br>
-<h5>by <a href="{% url 'company_detail' vacancy.company_id.id %}">{{vacancy.company_id.company_name}}</a></h5>
-        </td>
+    <div class="vacancy_list">
+        <table class="vacancy_list_table">
+            {% for vacancy in vacancy_list %}
+                <tr>
+                    <td>
+                        <a href="{% url 'vacancy_detail' vacancy.id %}"><h4>{{ vacancy.title }}</h4></a>
+                        <br>
+                        <h5>by <a
+                                href="{% url 'company_detail' vacancy.company_id.id %}">{{ vacancy.company_id.company_name }}</a>
+                        </h5>
+                    </td>
 
-        <td>
-            <h4>City: {{ vacancy.city }}</h4>
-        </td>
-        <td>
-            <h5>{{ vacancy.short_description }}</h5>
+                    <td>
+                        <h4>City: {{ vacancy.city }}</h4>
+                    </td>
+                    <td>
+                        <h5>{{ vacancy.short_description }}</h5>
 
-        </td>
-        <td>
-            <h4>{{ vacancy.salary }}$</h4>
-        </td>
-    </tr>
-        {% endfor %}
-    </table>
+                    </td>
+                    <td>
+                        <h4>{{ vacancy.salary }}$</h4>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
     </div>
     {% if page_obj.has_next %}
-    <a href="?page={{ page_obj.next_page_number }}">Next page</a>
+        <a href="?page={{ page_obj.next_page_number }}">Next page</a>
     {% endif %}
     {% if page_obj.has_previous %}
-    <a href="?page={{ page_obj.previous_page_number }}">Previous page </a>
+        <a href="?page={{ page_obj.previous_page_number }}">Previous page </a>
     {% endif %}
 {% endblock %}

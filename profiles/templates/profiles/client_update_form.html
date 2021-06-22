@@ -2,18 +2,18 @@
 {% block title %} Update Profile {% endblock %}
 {% block content %}
 
-<form method="post" enctype ="multipart/form-data">
-    {% csrf_token %}
-    <table>
-         {% for field in form %}
-        <tr>
-            <td><h3>{{field.label_tag}}</h3></td>
-            <td>{{field}}</td>
-            <td>{{ field.errors }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-    <input type="submit" value="Save">
-</form>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table>
+            {% for field in form %}
+                <tr>
+                    <td><h3>{{ field.label_tag }}</h3></td>
+                    <td>{{ field }}</td>
+                    <td>{{ field.errors }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <input type="submit" value="Save">
+    </form>
 
 {% endblock %}

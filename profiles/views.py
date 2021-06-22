@@ -1,7 +1,7 @@
-from django.views.generic import DetailView,CreateView,UpdateView,TemplateView,ListView
-from django.contrib.auth.views import LoginView,LogoutView
+from django.views.generic import DetailView, CreateView, UpdateView, TemplateView, ListView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth import login
-from . import models,forms
+from . import models, forms
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from job_vacancy.models import JobVacancy
@@ -17,7 +17,7 @@ class ClientCreate(CreateView):
     form_class = forms.ClientRegisterForm
     template_name = 'profiles/account_registration_form.html'
 
-    def form_valid(self,form):
+    def form_valid(self, form):
         print(form)
         client = form.save()
         login(self.request, client)
@@ -29,20 +29,20 @@ class CompanyCreate(CreateView):
     form_class = forms.CompanyRegisterForm
     template_name = 'profiles/account_registration_form.html'
 
-    def form_valid(self,form):
+    def form_valid(self, form):
         company = form.save()
         login(self.request, company)
         return HttpResponseRedirect(reverse('main_page'))
 
 
 class ClientUpdate(UpdateView):
-    model=models.Client
+    model = models.Client
     form_class = forms.ClientChangeForm
     template_name = 'profiles/client_update_form.html'
 
 
 class CompanyUpdate(UpdateView):
-    model=models.Company
+    model = models.Company
     form_class = forms.CompanyChangeForm
     template_name = 'profiles/company_update_form.html'
 
@@ -61,24 +61,9 @@ class Logout(LogoutView):
 
 
 class ClientDetail(DetailView):
-    model=models.Client
+    model = models.Client
     context_object_name = 'client'
     template_name = 'profiles/client_detail.html'
-
-    def get_context_data(self, **kwargs):
-        context=super().get_context_data(**kwargs)
-        x_forwarded_for = self.request.META.get('HTTP_X_FORWARDED_FOR')
-        if x_forwarded_for:
-            ip = x_forwarded_for.split(',')[-1]
-            print(x_forwarded_for)
-        else:
-            ip = self.request.META.get('REMOTE_ADDR')
-        context['base_url']=ip
-        if ip == '127.0.0.1':
-            context['port'] = self.request.META['SERVER_PORT']
-
-        return context
-
 
 
 class CompanyDetail(ListView):
@@ -86,16 +71,12 @@ class CompanyDetail(ListView):
     template_name = 'profiles/company_detail.html'
     paginate_by = 3
 
-
     def get_queryset(self):
-        self.queryset = JobVacancy.objects.filter(company_id_id=self.kwargs['pk'],is_active=True)
-        self.queryset=super().get_queryset()
+        self.queryset = JobVacancy.objects.filter(company_id_id=self.kwargs['pk'], is_active=True)
+        self.queryset = super().get_queryset()
         return self.queryset
 
     def get_context_data(self, **kwargs):
-
         context = super(CompanyDetail, self).get_context_data()
         context['company'] = models.Company.objects.get(id=self.kwargs['pk'])
         return context
-
-

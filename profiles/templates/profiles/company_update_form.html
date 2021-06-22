@@ -1,20 +1,20 @@
 {% extends 'main/base_template.html' %}
 {% block title %} Profile Update {% endblock %}
 {% block content %}
-<form method="post">
-    {% csrf_token %}
-    <table>
-         {% for field in form %}
-        <tr>
-            <td><h3>{{field.label_tag}}</h3></td>
-            <td>{{field}}</td>
-            <td>{{ field.errors }}</td>
-        </tr>
-        {% endfor %}
-        <input type="submit" value="Save">
+    <form method="post">
+        {% csrf_token %}
+        <table>
+            {% for field in form %}
+                <tr>
+                    <td><h3>{{ field.label_tag }}</h3></td>
+                    <td>{{ field }}</td>
+                    <td>{{ field.errors }}</td>
+                </tr>
+            {% endfor %}
+            <input type="submit" value="Save">
         </table>
 
-</form>
+    </form>
 
 
 {% endblock %}
